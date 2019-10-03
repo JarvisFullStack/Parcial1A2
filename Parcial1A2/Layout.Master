@@ -39,8 +39,8 @@
           Registros
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="Registros/rCategoria.aspx">Categorias</a>
-			<a class="dropdown-item" href="Registros/rEvaluacion.aspx">Evaluaciones</a>
+          <a class="dropdown-item" href="#">Entidad1</a>
+			<a class="dropdown-item" href="#">Entidad2</a>
         </div>
       </li>  
 
