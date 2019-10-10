@@ -8,9 +8,9 @@ using System.Web.UI.WebControls;
 
 namespace PrimerParcialAplicada2.Soporte
 {
-	public class Utilidades
+	public static class Utilidades
 	{
-		public static Int32 ToInt(String value)
+		public static Int32 ToInt(this String value)
 		{
 			int retorno = 0;
 			int.TryParse(value, out retorno);
@@ -28,7 +28,7 @@ namespace PrimerParcialAplicada2.Soporte
 		}
 
 
-		public static decimal ToDecimal(string valor)
+		public static decimal ToDecimal(this string valor)
 		{
 			decimal retorno = 0;
 			decimal.TryParse(valor, out retorno);
