@@ -29,6 +29,7 @@ namespace Entidades
 			this.Cantidad = 0;
 			this.Precio = 0;
 			this.Importe = 0;
+			this.Servicio = null;
 		}
 
 		public ServicioDetalle(int id_Servicio_Detalle, int id_Servicio, string nombreServicio, int cantidad, decimal precio, decimal importe)
@@ -39,6 +40,7 @@ namespace Entidades
 			Cantidad = cantidad;
 			Precio = precio;
 			Importe = importe;
+			this.Servicio = null;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using DAL;
 using Entidades;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -37,7 +38,8 @@ namespace BLL
 			bool paso = false;
 			Servicio Anterior = Buscar(entity.Id_Servicio);
 			Contexto context = new Contexto();
-			context.Servicio.Attach(entity);
+			//entity.Detalle = new List<ServicioDetalle>();
+			//context.Servicio.Attach(entity);
 			try
 			{
 				using (Contexto contexto = new Contexto())
@@ -50,6 +52,7 @@ namespace BLL
 						}
 					}
 					contexto.SaveChanges();
+					
 				}
 
 
@@ -65,7 +68,7 @@ namespace BLL
 				}
 				
 				//context = new Contexto();
-				//context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+				context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
 				paso = context.SaveChanges() > 0;
 
 			}

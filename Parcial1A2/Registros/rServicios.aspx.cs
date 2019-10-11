@@ -19,20 +19,18 @@ namespace Parcial1A2.Registros
 			{
 				Servicio itemevaluacion = new Servicio();
 				int id = Utilidades.ToInt(Request.QueryString["id"]);
-				LlenarViewState(itemevaluacion, itemevaluacion.Detalle);
+				ViewState["Servicio"] = new Servicio();
 				if (id > 0)
 				{
 					Servicio servicio = new RepositorioServicio().Buscar(id);
 					if (servicio != null)
 					{
-						LlenarViewState(servicio, servicio.Detalle);
 						LlenarGrid();
 						Utilidades.ShowToastr(this, "Registro encontrado", "Busqueda Exitosa!", "success");
 					}
 					else
 					{
 						Utilidades.ShowToastr(this, "Registro no encontrado", "Busqueda Fallida", "warning");
-						LimpiarViewState();
 					}
 				}
 			}
@@ -46,14 +44,13 @@ namespace Parcial1A2.Registros
 
 		private void LlenarGrid()
 		{
-			this.DetalleGridView.DataSource = (List<ServicioDetalle>)ViewState["Detalle"];
+			this.DetalleGridView.DataSource = ((Servicio)ViewState["Servicio"]).Detalle;
 			this.DetalleGridView.DataBind();
 		}
 
-		private void LlenarViewState(Servicio servicio, List<ServicioDetalle> detalle)
+		private void LlenarViewState(Servicio servicio)
 		{
 			ViewState["Servicio"] = servicio;
-			ViewState["Detalle"] = detalle;
 		}
 
 		protected void BotonNuevo_Click(object sender, EventArgs e)
@@ -70,15 +67,8 @@ namespace Parcial1A2.Registros
 			this.TextBoxPrecio.Text = "0";
 			this.TextBoxImporte.Text = "0";
 			TextBoxFecha.Text = DateTime.Now.Date.ToString("dd/MM/yy");
-			LimpiarViewState();
-		}
-
-		private void LimpiarViewState()
-		{
 			ViewState["Servicio"] = new Servicio();
-			ViewState["Detalle"] = new List<ServicioDetalle>();
-			this.DetalleGridView.DataSource = new List<ServicioDetalle>();
-			this.DetalleGridView.DataBind();
+			LlenarGrid();
 		}
 
 		protected void BotonGuardar_Click(object sender, EventArgs e)
@@ -100,7 +90,6 @@ namespace Parcial1A2.Registros
 			{
 				Utilidades.ShowToastr(this, "Transaccion Exitosa", "Exito", "success");
 				this.Limpiar();
-				this.LimpiarViewState();
 			}
 			else
 			{
@@ -113,10 +102,9 @@ namespace Parcial1A2.Registros
 		{
 			Servicio servicio = (Servicio)ViewState["Servicio"];
 			servicio.Id_Servicio = Utilidades.ToInt(this.TextBoxId.Text);
-			servicio.NombreEstudiante = this.TextBoxNombreEstudiante.Text;
-			servicio.Detalle = (List<ServicioDetalle>)ViewState["Detalle"];
+			servicio.NombreEstudiante = this.TextBoxNombreEstudiante.Text; 
 			servicio.Fecha = DateTime.Parse(TextBoxFecha.Text);
-			LlenarViewState(servicio, servicio.Detalle);
+			LlenarViewState(servicio);
 			return servicio;
 		}
 
@@ -134,7 +122,7 @@ namespace Parcial1A2.Registros
 					if (paso)
 					{
 						Utilidades.ShowToastr(this, "Registro Eliminado!", "Exito", "info");
-						LimpiarViewState();
+						
 						Limpiar();
 					}
 					else
@@ -159,21 +147,20 @@ namespace Parcial1A2.Registros
 			GridViewRow row = (sender as Button).NamingContainer as GridViewRow;
 			servicio.Detalle.RemoveAt(row.RowIndex);
 			detalle.RemoveAt(row.RowIndex);
-			LlenarViewState(servicio, detalle);
 			CalcularTotal();
-			LlenarGrid();			
+			LlenarGrid();
 		}
 
-		
+
 
 		protected void BotonAgregarDetalle_Click(object sender, EventArgs e)
 		{
-			List<ServicioDetalle> detalle = (List<ServicioDetalle>)ViewState["Detalle"];
+			Servicio servicio = (Servicio)ViewState["Detalle"];
 			if (ValidarNumericos())
 			{
 				ServicioDetalle nuevoItem = GetItemDetalle();
-				detalle.Add(nuevoItem);
-				ViewState["Detalle"] = detalle;
+				servicio.Detalle.Add(nuevoItem);
+				ViewState["Servicio"] = servicio;
 				LlenarGrid();
 				CalcularTotal();
 				Utilidades.ShowToastr(this, "Agregado Correctamente", "Correcto");
@@ -217,10 +204,11 @@ namespace Parcial1A2.Registros
 				paso = false;
 			}
 
-			if(!paso)
+			if (!paso)
 			{
 				Utilidades.ShowToastr(this, "Debe llenar los campos correctamente!", "Introduzca datos validos", "warning");
-			} else
+			}
+			else
 			{
 				Utilidades.ShowToastr(this, "Agregado Correctamente!", "Exito", "success");
 			}
@@ -251,7 +239,7 @@ namespace Parcial1A2.Registros
 			List<ServicioDetalle> lista = new List<ServicioDetalle>();
 			lista = (List<ServicioDetalle>)ViewState["Detalle"];
 			decimal total = 0;
-			foreach(var item in lista)
+			foreach (var item in lista)
 			{
 				total += (item.Precio * item.Cantidad);
 			}
@@ -266,12 +254,11 @@ namespace Parcial1A2.Registros
 			this.TextBoxImporte.Text = (TextBoxCantidad.Text.ToInt() * TextBoxPrecio.Text.ToDecimal()).ToString();
 		}
 
-		
+
 
 		private void LlenaCampos()
 		{
 			Servicio servicio = (Servicio)ViewState["Servicio"];
-			List<ServicioDetalle> detalle = (List<ServicioDetalle>)ViewState["Detalle"];
 			this.TextBoxNombreEstudiante.Text = servicio.NombreEstudiante;
 			LlenarGrid();
 		}
@@ -284,8 +271,8 @@ namespace Parcial1A2.Registros
 				Servicio servicio = new RepositorioServicio().Buscar(id);
 				if (servicio != null)
 				{
-					this.LlenarViewState(servicio, servicio.Detalle);
 					LlenaCampos();
+					LlenarGrid();
 				}
 			}
 		}
