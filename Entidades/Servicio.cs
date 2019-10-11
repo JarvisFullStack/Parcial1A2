@@ -20,6 +20,8 @@ namespace Entidades
 
 		public Servicio()
 		{
+			Id_Servicio = 0;
+			NombreEstudiante = string.Empty;
 			this.Fecha = DateTime.Now.Date;
 			this.Detalle = new List<ServicioDetalle>();
 		}

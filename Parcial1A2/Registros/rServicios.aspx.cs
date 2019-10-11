@@ -237,6 +237,7 @@ namespace Parcial1A2.Registros
 		private ServicioDetalle GetItemDetalle()
 		{
 			ServicioDetalle item = new ServicioDetalle();
+			item.Id_Servicio_Detalle = 0;
 			item.NombreServicio = TextBoxNombreServicio.Text;
 			item.Id_Servicio = ((Servicio)ViewState["Servicio"]).Id_Servicio;
 			item.Cantidad = Utilidades.ToInt(this.TextBoxCantidad.Text);

@@ -18,10 +18,14 @@ namespace Entidades
 		public int Cantidad { get; set; }
 		public decimal Precio { get; set; }
 		public decimal Importe { get; set; }
+
 		[ForeignKey("Id_Servicio")]
 		public virtual Servicio Servicio { get; set; }
+
 		public ServicioDetalle()
 		{
+			this.Id_Servicio = 0;
+			this.Id_Servicio_Detalle = 0;
 			this.Cantidad = 0;
 			this.Precio = 0;
 			this.Importe = 0;

@@ -1,11 +1,8 @@
 ﻿using DAL;
 using Entidades;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
@@ -17,7 +14,7 @@ namespace BLL
 			Contexto contexto = new Contexto();
 			try
 			{
-				Servicio = contexto.Servicio.Include(x => x.Detalle).Where(x => x.Id_Servicio == id).FirstOrDefault();
+				Servicio = contexto.Servicio.Include(x => x.Detalle).Where(x => x.Id_Servicio == id).AsNoTracking().FirstOrDefault();
 			}
 			catch (Exception)
 			{
@@ -40,6 +37,7 @@ namespace BLL
 			bool paso = false;
 			Servicio Anterior = Buscar(entity.Id_Servicio);
 			Contexto context = new Contexto();
+			context.Servicio.Attach(entity);
 			try
 			{
 				using (Contexto contexto = new Contexto())
@@ -53,15 +51,23 @@ namespace BLL
 					}
 					contexto.SaveChanges();
 				}
-				foreach (var item in entity.Detalle)
+
+
+				foreach (var item in entity.Detalle.ToList())
 				{
-					var estado = EntityState.Modified;
+					var estado = EntityState.Unchanged;
 					if (item.Id_Servicio_Detalle == 0)
+					{
 						estado = EntityState.Added;
-					context.Entry(item).State = estado;
+						context.Entry(item).State = estado;
+					}
+
 				}
-				context.Entry(entity).State = EntityState.Modified;
+				
+				//context = new Contexto();
+				//context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
 				paso = context.SaveChanges() > 0;
+
 			}
 			catch (Exception)
 			{

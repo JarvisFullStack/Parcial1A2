@@ -52,12 +52,11 @@ namespace ParcialA2.Test
 		public void Modificar()
 		{
 			RepositorioServicio repositorio = new RepositorioServicio();
-			Servicio servicio = repositorio.Buscar(1);
-			servicio.Detalle.Add(new ServicioDetalle(0, 1, "Servicio1", 2, 10, 2*10));
-			servicio.Detalle.Add(new ServicioDetalle(0, 1, "Servicio2", 3, 5, 3*5));
+			Servicio servicio = repositorio.Buscar(2);
+			servicio.Detalle.Add(new ServicioDetalle(0, 2, "Servicio1", 2, 10, 2*10));
+			servicio.Detalle.Add(new ServicioDetalle(0, 2, "Servicio2", 3, 5, 3*5));
 			bool paso1 = repositorio.Modificar(servicio);
-			bool paso2 = repositorio.Buscar(1).Detalle.Count > 0;
-			Assert.IsTrue(paso1 && paso2);
+			Assert.IsTrue(paso1);
 
 		}
 

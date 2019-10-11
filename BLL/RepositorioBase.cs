@@ -10,17 +10,21 @@ namespace BLL
 {
 	public class RepositorioBase<T> : IDisposable, IRepository<T> where T : class
 	{
-		internal Contexto _context;
+		
 
 		public RepositorioBase()
 		{
-			_context = new Contexto();
+			
+		}
+		~ RepositorioBase()
+		{
+
 		}
 
 		public virtual bool Eliminar(int id)
 		{
 			bool ok = false;
-			this._context = new Contexto();
+			Contexto _context = new Contexto();
 			try
 			{
 				T entity = _context.Set<T>().Find(id);
@@ -37,21 +41,18 @@ namespace BLL
 			}
 			finally
 			{
-				this._context.Dispose();
+				_context.Dispose();
 			}
 
 			return ok;
 		}
 
-		public void Dispose()
-		{
-			_context.Dispose();
-		}
+		public void Dispose() {}
 
 		public virtual T Buscar(int id)
 		{
 			T entity;
-			this._context = new Contexto();
+			Contexto _context = new Contexto();
 			try
 			{
 				entity = _context.Set<T>().Find(id);
@@ -62,7 +63,7 @@ namespace BLL
 			}
 			finally
 			{
-				this._context.Dispose();
+				_context.Dispose();
 			}
 
 			return entity;
@@ -71,7 +72,7 @@ namespace BLL
 		public virtual List<T> GetList(Expression<Func<T, bool>> expression)
 		{
 			List<T> list = new List<T>();
-			this._context = new Contexto();
+			Contexto _context = new Contexto();
 			try
 			{
 				list = _context.Set<T>().Where(expression).ToList();
@@ -82,7 +83,7 @@ namespace BLL
 			}
 			finally
 			{
-				this._context = new Contexto();
+				_context = new Contexto();
 			}
 			return list;
 		}
@@ -92,7 +93,7 @@ namespace BLL
 		public virtual bool Modificar(T entity)
 		{
 			bool ok = false;
-			this._context = new Contexto();
+			Contexto _context = new Contexto();
 			try
 			{
 				_context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
@@ -107,7 +108,7 @@ namespace BLL
 			}
 			finally
 			{
-				this._context.Dispose();
+				_context.Dispose();
 			}
 
 			return ok;
@@ -116,7 +117,7 @@ namespace BLL
 		public virtual bool Guardar(T entity)
 		{
 			bool ok = false;
-			this._context = new Contexto();
+			Contexto _context = new Contexto();
 			try
 			{
 				if (_context.Set<T>().Add(entity) != null)
@@ -131,7 +132,7 @@ namespace BLL
 			}
 			finally
 			{
-				this._context.Dispose();
+				_context.Dispose();
 			}
 
 			return ok;
