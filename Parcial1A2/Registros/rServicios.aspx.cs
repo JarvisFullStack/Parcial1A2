@@ -66,6 +66,7 @@ namespace Parcial1A2.Registros
 			this.TextBoxCantidad.Text = "0";
 			this.TextBoxPrecio.Text = "0";
 			this.TextBoxImporte.Text = "0";
+			this.TextBoxTotal.Text = string.Empty;
 			TextBoxFecha.Text = DateTime.Now.Date.ToString("dd/MM/yy");
 			ViewState["Servicio"] = new Servicio();
 			LlenarGrid();
@@ -155,7 +156,7 @@ namespace Parcial1A2.Registros
 
 		protected void BotonAgregarDetalle_Click(object sender, EventArgs e)
 		{
-			Servicio servicio = (Servicio)ViewState["Detalle"];
+			Servicio servicio = (Servicio)ViewState["Servicio"];
 			if (ValidarNumericos())
 			{
 				ServicioDetalle nuevoItem = GetItemDetalle();
@@ -163,6 +164,7 @@ namespace Parcial1A2.Registros
 				ViewState["Servicio"] = servicio;
 				LlenarGrid();
 				CalcularTotal();
+				LimpiarCamposDetalle();
 				Utilidades.ShowToastr(this, "Agregado Correctamente", "Correcto");
 			}
 			else
@@ -171,6 +173,14 @@ namespace Parcial1A2.Registros
 			}
 
 
+		}
+
+		private void LimpiarCamposDetalle()
+		{
+			this.TextBoxNombreServicio.Text = string.Empty;
+			this.TextBoxPrecio.Text = string.Empty;
+			this.TextBoxCantidad.Text = string.Empty;
+			this.TextBoxImporte.Text = string.Empty;
 		}
 
 		private bool ValidarNumericos()
@@ -236,10 +246,9 @@ namespace Parcial1A2.Registros
 
 		private Decimal CalcularTotal()
 		{
-			List<ServicioDetalle> lista = new List<ServicioDetalle>();
-			lista = (List<ServicioDetalle>)ViewState["Detalle"];
+			Servicio servicio = (Servicio)ViewState["Servicio"];
 			decimal total = 0;
-			foreach (var item in lista)
+			foreach (var item in servicio.Detalle.ToList())
 			{
 				total += (item.Precio * item.Cantidad);
 			}
@@ -269,6 +278,7 @@ namespace Parcial1A2.Registros
 			if (id > 0)
 			{
 				Servicio servicio = new RepositorioServicio().Buscar(id);
+				ViewState["Servicio"] = servicio;
 				if (servicio != null)
 				{
 					LlenaCampos();

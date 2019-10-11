@@ -146,7 +146,7 @@
 
 		</div>
 		<div class="card-footer">
-			<asp:LinkButton ID="BotonNuevo" class="btn btn-primary" runat="server" OnClick="BotonNuevo_Click">Nuevo</asp:LinkButton>
+			<asp:LinkButton ID="BotonNuevo" class="btn btn-primary" runat="server" OnClick="BotonNuevo_Click" CausesValidation="false">Nuevo</asp:LinkButton>
 			<asp:LinkButton ID="BotonGuardar" class="btn btn-success" runat="server" OnClick="BotonGuardar_Click">Guardar</asp:LinkButton>
 			<asp:LinkButton ID="BotonEliminar" class="btn btn-danger" runat="server" OnClick="BotonEliminar_Click">Eliminar</asp:LinkButton>
 		</div>
